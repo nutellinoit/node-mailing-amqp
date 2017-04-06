@@ -1,0 +1,21 @@
+{
+  "amqp": "amqp://localhost",
+  "delaysend": 3000, 
+  "queue": "nodemailer-amqp",
+
+  "server": {
+    "port": 25000,
+    "host": "0.0.0.0",
+    "messagesize" : 10
+  },
+  "relay": {
+    "port": 25,
+    "host": "192.168.100.87",
+    "messagesize" : 10
+  },
+  "publisher":{
+	"port": 25,
+    "host": "0.0.0.0",
+    "messagesize" : 10
+  }
+}
