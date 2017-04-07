@@ -21,6 +21,7 @@
     "json-prune": "^1.0.1",
     "mailparser": "^2.0.2",
     "mailparser-iconv-full": "^2.0.2",
+    "moment": "^2.18.1",
     "nodemailer": "^3.0.2",
     "smtp-server": "^2.0.1",
     "stream-to-string": "^1.1.0"

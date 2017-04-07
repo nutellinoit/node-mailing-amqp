@@ -7,7 +7,7 @@ const simpleParser = require('mailparser-iconv-full').simpleParser;
 
 var bufferConcat = require('buffer-concat');
 var Iconv  = require('iconv').Iconv;
-
+var moment = require('moment');
 var mailparsed;
 
 
@@ -120,6 +120,13 @@ amqplib.connect(config.amqp, (err, connection) => {
 
 					mailparsed.attachments[0].content=new Buffer(Bufferizzato.data);
 					*/
+					
+					
+					var DATE_RFC2822 = "ddd, DD MMM YYYY HH:mm:ss ZZ";
+					console.log(moment().format(DATE_RFC2822));
+					
+					mailparsed.date=moment().format(DATE_RFC2822);
+					
 					
 	                transport.sendMail(mailparsed, (err, info) => {
 	                    //tolgo lo stesso il messaggio dalla coda
