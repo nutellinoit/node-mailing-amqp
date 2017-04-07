@@ -52,10 +52,9 @@ in questo modo avremo la porta 9267 in ascolto in localhost
 
 ## Installazione
 
-Scaricare il progetto da git.busnet.it
+Clonare il progetto git con ```git clone``` e spostarsi all'interno della cartella
 
 ```bash
-git clone http://git.busnet.it/progetti/node-mailing-amqp.git
 cd node-mailing-amqp
 ```
 
