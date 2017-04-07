@@ -1,18 +1,17 @@
 {
-  "name": "nodemailer-amqp-example",
+  "name": "node-mailing-amqp",
   "version": "1.0.0",
-  "description": "An example of using Nodemailer with RabbitMQ",
+  "description": "Full smtp server using Nodemailer with RabbitMQ and Postfix",
   "main": "client.js",
   "scripts": {
     "test": "grunt",
-    "server": "node server.js",
     "publish": "node publisher.js",
     "subscribe": "node subscriber.js"
   },
   "keywords": [
     "nodemailer"
   ],
-  "author": "Andris Reinman",
+  "author": "Original project Andris Reinman, modified by Samuele Chiocca",
   "license": "EUPL-1.1",
   "dependencies": {
     "amqplib": "^0.5.1",
