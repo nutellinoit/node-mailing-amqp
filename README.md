@@ -64,6 +64,12 @@ Installare le dipendenze richieste
 npm install --production
 ```
 
+Creare le cartelle dei log
+
+```bash
+./setup.sh
+```
+
 Assicurarsi di avere RabbitMQ server attivo, verificare anche che le configurazioni siano corrette in [config.json](./config.json).
 
 
