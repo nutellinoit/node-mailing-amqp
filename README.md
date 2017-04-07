@@ -72,7 +72,7 @@ Assicurarsi di avere RabbitMQ server attivo, verificare anche che le configurazi
 
 Questo progetto è l'insieme di tre parti:
 
-1. **Postfix SMTP server** . Questo è il servizio reale che invierà infine le mail, gira su localhost e accetta mail solo da localhost.
+1. **Postfix SMTP server** . Questo è il servizio reale che invierà infine le mail, gira su localhost (porta 9267) e accetta mail solo da localhost.
 2. **Processo Subscriber** ([subscriber.js](./subscriber.js)). Questo processo è quello che si occupa di recuperare i messaggi dalla coda rabbit e mandarli in invio tramite postfix. Ogni fetch è temporizzato tramite il valore config.delaysend nel file config.json
 3. **Processo Publisher** ([publisher.js](./publisher.js)). Questo è l'smtp di ponte che si occupa di validare l'utente che sta inviando la mail, e inserisce la mail da recapitare in coda rabbit
 
