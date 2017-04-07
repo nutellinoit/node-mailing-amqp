@@ -63,7 +63,7 @@ const server = new SMTPServer({
 		  stream.on('data', (chunk) => {
 		     //chunks.push(chunk.toString());
 		     chunks.push(chunk);
-		     console.log(chunk);
+		     //console.log(chunk);
 		     	     
 		  });
 		  
@@ -75,10 +75,16 @@ const server = new SMTPServer({
            
             
             console.log(''); // ensure linebreak after the message
+            //console.log("======== PRIMA DI STAMPA PULIZIA ======");
+            var pulizia = bufferConcat(chunks).toString();
             
+            pulizia= pulizia.replace(/ /g,'');
             
+            pulizia= pulizia.replace(/"/g,'');
             
-            var splittata = bufferConcat(chunks).toString().split("charset=");
+            console.log(pulizia);
+            //console.log("======== PRIMA DI STAMPA DEL CHUNKOTTO TOTALO ======");
+            var splittata = pulizia.split("charset=");
 			
 			//console.log(bufferConcat(chunks).toString());
 			
@@ -102,9 +108,9 @@ const server = new SMTPServer({
             
             
             var str = iconv.convert(Buffer.concat(chunks)).toString();
-            console.log("======== PRIMA DI STAMPA MESSAGGIO ======");
+            console.log("======== PRIMA DI STAMPA MESSAGGIO CONVERTITO CON ICONV ======");
 			console.log(str);
-            console.log("======== DOPO STAMPA MESSAGGIO ======");
+            console.log("======== DOPO STAMPA MESSAGGIO CONVERTITO ======");
             messaggio=str;
             
 	        // Create connection to AMQP server
