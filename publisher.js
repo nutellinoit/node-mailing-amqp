@@ -17,7 +17,7 @@ const server = new SMTPServer({
     logger: false,
 	
     // not required but nice-to-have
-    banner: 'Benvenuto nel magico mondo BUSNET SUPERMAGIC MAILING SOFTWARE PER FUORI',
+    banner: 'Benvenuto nel magico mondo dell smtp da fuori',
 
     // disable STARTTLS to allow authentication in clear text mode
     disabledCommands: ['STARTTLS'],
