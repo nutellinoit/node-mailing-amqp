@@ -8,6 +8,7 @@ var toString = require('stream-to-string');
 var messaggio = "";
 var bufferConcat = require('buffer-concat');
 var Iconv  = require('iconv').Iconv;
+var charset_extract="";
 //devo creare anche qui il server SMTP come server.js
 
 const server = new SMTPServer({
@@ -21,21 +22,10 @@ const server = new SMTPServer({
     // disable STARTTLS to allow authentication in clear text mode
     disabledCommands: ['STARTTLS'],
 	
-    // Accept messages up to 50 MB. This is a soft limit
+    // Accept messages up to config.publisher.messagesize MB. This is a soft limit
     size: config.publisher.messagesize * 1024 * 1024,
 
-    // Setup authentication
-    // Allow all usernames and passwords, no account checking
     
-    
-    /*onAuth(auth, session, callback) {
-        return callback(null, {
-            user: {
-                username: auth.username
-            }
-        });
-    },*/
-	
 	// Account cheching on auth.json
 
 	
@@ -74,6 +64,7 @@ const server = new SMTPServer({
 		     //chunks.push(chunk.toString());
 		     chunks.push(chunk);
 		     console.log(chunk);
+		     	     
 		  });
 		  
         		                
@@ -81,14 +72,39 @@ const server = new SMTPServer({
         
         stream.on('end', () => {
             
-            var iconv = new Iconv('latin1', 'UTF-8');
+           
             
             console.log(''); // ensure linebreak after the message
             
-            console.log(bufferConcat(chunks).toString());
+            
+            
+            var splittata = bufferConcat(chunks).toString().split("charset=");
+			
+			//console.log(bufferConcat(chunks).toString());
+			
+			//console.log("======== PRIMA DI STAMPA SPLITTATA ======");
+			//console.log(splittata);
+			//console.log("======== DOPO STAMPA SPLITTATA ======");
+			if(splittata[1]!=''){
+				var splittata2 = splittata[1].split(";");
+				//console.log("CHARSETSAM %s",splittata2[0]);
+				charset_extract=splittata2[0].split("\n");
+				charset_extract=charset_extract[0];
+				//console.log("CHARSETEXTRACT %s",charset_extract);
+			}
+
+			console.log("THE LAST LOG: %s",charset_extract.toUpperCase().trim());
+
+            var iconv = new Iconv(charset_extract.toUpperCase().trim(), 'UTF-8//TRANSLIT');
+            
+            console.log(''); // ensure linebreak after the message
+            
+            
             
             var str = iconv.convert(Buffer.concat(chunks)).toString();
-            console.log(str);
+            console.log("======== PRIMA DI STAMPA MESSAGGIO ======");
+			console.log(str);
+            console.log("======== DOPO STAMPA MESSAGGIO ======");
             messaggio=str;
             
 	        // Create connection to AMQP server

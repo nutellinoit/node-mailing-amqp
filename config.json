@@ -1,6 +1,6 @@
 {
   "amqp": "amqp://localhost",
-  "delaysend": 3000, 
+  "delaysend": 20000, 
   "queue": "node-mailing-amqp",
 
   "server": {
