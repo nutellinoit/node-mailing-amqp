@@ -121,5 +121,8 @@ rabbitmqctl list_queues
 eliminare la coda rabbit
 
 ```bash
-python rabbitmqadmin purge queue name=nodemailer-amqp
+python rabbitmqadmin purge queue name=node-mailing-amqp
 ```
+
+
+I logs sono all'interno della cartella ```LOGS```

@@ -1,7 +1,7 @@
 {
   "amqp": "amqp://localhost",
   "delaysend": 3000, 
-  "queue": "nodemailer-amqp",
+  "queue": "node-mailing-amqp",
 
   "server": {
     "port": 25000,
