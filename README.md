@@ -1,6 +1,8 @@
-# Appunti Busnet
+# Installazione e avvio
 
-Bisogna installare anche il broker 
+## Requisiti
+
+Installare il broker rabbitmq 
 
 (su mac)
 
@@ -8,21 +10,86 @@ Bisogna installare anche il broker
 brew install rabbitmq
 ```
 
-su ubuntu, andare sul sito di rabbimq, scaricare il deb e fare :
+su ubuntu, andare sul sito di rabbimq https://www.rabbitmq.com , scaricare il deb e fare :
 
 ```bash
 dpkg -i rabbitmq.deb
 ```
-per installare forever
+
+il nome ovviamente varierà.
+
+Installare postfix
 
 ```bash
-npm install forever -g
+apt-get install postfix
 ```
 
+Installarlo come sito internet, e inserire un FQDN valido
 
-**publisher.js** contiene tutto il codice che serve per mettere in coda i messaggi
+Dopodichè, andare sul file
 
-#### comandi utili rabbit
+```bash
+/etc/postfix/master.cf
+```
+
+e modificare la porta di ascolto
+
+dalla riga
+
+```
+```
+
+alla riga
+
+
+```
+```
+
+in questo modo avremo la porta XXX in ascolto in localhost 
+
+
+## Installazione
+
+Scaricare il progetto da git.busnet.it
+
+```bash
+git clone http://git.busnet.it/progetti/node-mailing-amqp.git
+cd node-mailing-amqp
+```
+
+Installare le dipendenze richieste
+
+```bash
+npm install --production
+```
+
+Assicurarsi di avere RabbitMQ server attivo, verificare anche che le configurazioni siano corrette in [config.json](./config.json).
+
+
+### Esecuzione
+
+Questo progetto è l'insieme di tre parti:
+
+1. **Postfix SMTP server** . Questo è il servizio reale che invierà infine le mail, gira su localhost e accetta mail solo da localhost.
+2. **Processo Subscriber** ([subscriber.js](./subscriber.js)). Questo processo è quello che si occupa di recuperare i messaggi dalla coda rabbit e mandarli in invio tramite postfix. Ogni fetch è temporizzato tramite il valore config.delaysend nel file config.json
+3. **Processo Publisher** ([publisher.js](./publisher.js)). Questo è l'smtp di ponte che si occupa di validare l'utente che sta inviando la mail, e inserisce la mail da recapitare in coda rabbit
+
+Si possono avviare tutti i processi tramite il comando (all'interno della cartella)
+
+
+```bash
+./restart.sh
+```
+
+### Impostazione credenziali
+
+Modificare il file [auth.json](./auth.json) e aggiungere gli account che verranno utilizzati dal sistema
+
+Esempio:
+
+
+
+#### UTILITY 
 
 ```bash
 rabbitmqctl list_queues
@@ -33,47 +100,3 @@ eliminare la coda rabbit
 ```bash
 python rabbitmqadmin purge queue name=nodemailer-amqp
 ```
-
-### OLD Nodemailer AMQP example
-
-This is an example of using RabbitMQ ([amqplib](http://www.squaremobius.net/amqp.node/)) for queueing [Nodemailer](https://nodemailer.com/) email messages. This allows you to push messages from your application quickly to delivery queue and let Nodemailer handle the actual sending asynchronously from a background process.
-
-This example also demonstrates using different credentials for different messages using the same Nodemailer transport.
-
-## Setup
-
-Download files from Github
-
-```
-$ git clone git://github.com/nodemailer/nodemailer-amqp-example.git
-$ cd nodemailer-amqp-example
-```
-
-Install required dependencies
-
-```
-$ npm install --production
-```
-
-Make sure that you have a RabbitMQ server running (default config assumes RabbitMQ running on localhost with default credentials) and also check the configuration options in [config.json](./config.json).
-
-### Running
-
-The example contains 3 different parts:
-
-1. **Example SMTP server** ([server.js](./server.js)). This is where Nodemailer sends the messages to. The server prints message source to console and does not actually deliver anything
-2. **Subscriber process** ([subscriber.js](./subscriber.js)). This is the worker process that fetches queued messages from RabbitMQ and delivers these using Nodemailer. You can spawn up as many subscriber processes as you want, even though a single one should be fine in most cases.
-3. **Publisher process** ([publisher.js](./publisher.js)). This is an example application process that pushes message data to RabbitMQ for delivery. Normally it would be the job of your application.
-
-Run all processes in different windows, using the following execution order:
-
-```
-$ npm run server
-$ npm run subscribe
-$ npm run publish
-```
-
-## Example
-
-![](https://cldup.com/VJgbkWZQuS.png)
-
