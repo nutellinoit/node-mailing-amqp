@@ -37,15 +37,17 @@ e modificare la porta di ascolto
 dalla riga
 
 ```
+smtpd      inet  n       -       y       -       -       smtpd
 ```
 
 alla riga
 
 
 ```
+9267      inet  n       -       y       -       -       smtpd
 ```
 
-in questo modo avremo la porta XXX in ascolto in localhost 
+in questo modo avremo la porta 9267 in ascolto in localhost 
 
 
 ## Installazione
@@ -86,6 +88,27 @@ Si possono avviare tutti i processi tramite il comando (all'interno della cartel
 Modificare il file [auth.json](./auth.json) e aggiungere gli account che verranno utilizzati dal sistema
 
 Esempio:
+
+```json
+{
+	"users": [{
+		"username": "test1",
+		"password": "test1"
+	}, {
+		"username": "test2",
+		"password": "test2"
+	}, {
+		"username": "test3",
+		"password": "test3"
+	}, {
+		"username": "test4",
+		"password": "test4"
+	}, {
+		"username": "test5",
+		"password": "test5"
+	}]
+}
+```
 
 
 

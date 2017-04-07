@@ -2,6 +2,7 @@
 
 const amqplib = require('amqplib/callback_api');
 const config = require('./config');
+const authuser = require('./auth');
 const SMTPServer = require('smtp-server').SMTPServer;
 var toString = require('stream-to-string');
 var messaggio = "";
@@ -25,14 +26,42 @@ const server = new SMTPServer({
 
     // Setup authentication
     // Allow all usernames and passwords, no account checking
-    onAuth(auth, session, callback) {
+    
+    
+    /*onAuth(auth, session, callback) {
         return callback(null, {
             user: {
                 username: auth.username
             }
         });
-    },
+    },*/
+	
+	// Account cheching on auth.json
 
+	
+	onAuth(auth, session, callback){
+        
+        for(var i = 0; i < authuser.users.length; i++) {
+	    
+	    	  
+	    	if(authuser.users[i].username==auth.username && authuser.users[i].password==auth.password) {
+	    	  return callback(null, {
+	            user: {
+	                username: auth.username
+	            }
+        	  });
+	    	}  
+	    	  
+	    
+	    }
+        return callback(new Error('Invalid username or password'));
+        
+        
+    },
+    
+    
+    
+    
     // Handle message stream
     onData(stream, session, callback) {
         console.log('Streaming message from user %s', session.user.username);
