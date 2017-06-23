@@ -1,5 +1,5 @@
 {
-  "amqp": "amqp://localhost",
+  "amqp": "amqp://rabbitmq",
   "delaysend": 20000, 
   "queue": "node-mailing-amqp",
 

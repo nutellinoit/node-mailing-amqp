@@ -1,96 +1,54 @@
+TODO : Translate in English
+
+# Node mailing amqp
+
+Server smtp in ascolto sulla porta 25, (modificabile dal docker-compose.yml) per l'invio scaglionato nel tempo delle email
+
+Sistema di container basato sul progetto contenuto nella cartella ```/legacy_project```
+
+
 # Installazione e avvio
 
 ## Requisiti
 
-Installare il broker rabbitmq 
 
-(su mac)
+1. Avere installato l'ambiente docker e il programma docker-compose. 
 
-```bash
-brew install rabbitmq
-```
+#### Ambiente docker
 
-su ubuntu, andare sul sito di rabbimq https://www.rabbitmq.com , scaricare il deb e fare :
+* docker Ubuntu Link al sito ufficiale: https://store.docker.com/editions/community/docker-ce-server-ubuntu
+* docker per Mac: https://store.docker.com/editions/community/docker-ce-desktop-mac
 
-```bash
-dpkg -i rabbitmq.deb
-```
+#### Docker Compose
 
-il nome ovviamente varierà.
-
-Installare postfix
+per installare docker-compose
 
 ```bash
-apt-get install postfix
+#se non si ha python
+apt-get install python python-pip
+# Installazione di docker-compose
+pip install docker-compose
 ```
+#### Avvio e installazione
 
-Installarlo come sito internet, e inserire un FQDN valido
-
-Dopodichè, andare sul file
-
-```bash
-/etc/postfix/master.cf
-```
-
-e modificare la porta di ascolto
-
-dalla riga
-
-```
-smtpd      inet  n       -       y       -       -       smtpd
-```
-
-alla riga
-
-
-```
-9267      inet  n       -       y       -       -       smtpd
-```
-
-in questo modo avremo la porta 9267 in ascolto in localhost 
-
-
-## Installazione
-
-Clonare il progetto git con ```git clone``` e spostarsi all'interno della cartella
-
-```bash
-cd node-mailing-amqp
-```
-
-Installare le dipendenze richieste
-
-```bash
-npm install --production
-```
-
-Creare le cartelle dei log
-
-```bash
-./setup.sh
-```
-
-Assicurarsi di avere RabbitMQ server attivo, verificare anche che le configurazioni siano corrette in [config.json](./config.json).
-
-
-### Esecuzione
-
-Questo progetto è l'insieme di tre parti:
-
-1. **Postfix SMTP server** . Questo è il servizio reale che invierà infine le mail, gira su localhost (porta 9267) e accetta mail solo da localhost.
-2. **Processo Subscriber** ([subscriber.js](./subscriber.js)). Questo processo è quello che si occupa di recuperare i messaggi dalla coda rabbit e mandarli in invio tramite postfix. Ogni fetch è temporizzato tramite il valore config.delaysend nel file config.json
-3. **Processo Publisher** ([publisher.js](./publisher.js)). Questo è l'smtp di ponte che si occupa di validare l'utente che sta inviando la mail, e inserisce la mail da recapitare in coda rabbit
-
-Si possono avviare tutti i processi tramite il comando (all'interno della cartella)
+Posizionarsi nella cartella root del progetto e lanciare il sistema con:
 
 
 ```bash
-./restart.sh
+docker-compose up
 ```
 
-### Impostazione credenziali
+Se si vuole lanciare in background lanciarlo con
 
-Modificare il file [auth.json](./auth.json) e aggiungere gli account che verranno utilizzati dal sistema
+```bash
+docker-compose up -d
+```
+
+## Configurazioni
+
+### Account email:
+
+Modificare il file [publisher/auth.json](publisher/auth.json) e aggiungere gli account che verranno utilizzati dal sistema
 
 Esempio:
 
@@ -115,19 +73,23 @@ Esempio:
 }
 ```
 
+### Temporizzazione
 
+Modificare il file [subscriber/config.json](subscriber/config.json) e cambiare la riga delay send con il valore in millisecondi voluto
 
-#### UTILITY 
-
-```bash
-rabbitmqctl list_queues
+```json
+{
+  "amqp": "amqp://rabbitmq",
+  "delaysend": 20000, 
+  "queue": "node-mailing-amqp",
+  "relay": {
+    "port": 25,
+    "host": "postfix",
+    "messagesize" : 10
+  }
+}
 ```
 
-eliminare la coda rabbit
+### Hostname di uscita
 
-```bash
-python rabbitmqadmin purge queue name=node-mailing-amqp
-```
-
-
-I logs sono all'interno della cartella ```LOGS```
+Modificare il file docker-compose.yml nel parametro SMTP_HOSTNAME

@@ -1,6 +1,6 @@
 {
   "name": "node-mailing-amqp",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Full smtp server using Nodemailer with RabbitMQ and Postfix",
   "main": "client.js",
   "scripts": {
@@ -24,11 +24,5 @@
     "nodemailer": "^3.0.2",
     "smtp-server": "^2.0.1",
     "stream-to-string": "^1.1.0"
-  },
-  "devDependencies": {
-    "eslint-config-nodemailer": "^1.0.0",
-    "grunt": "^1.0.1",
-    "grunt-cli": "^1.2.0",
-    "grunt-eslint": "^19.0.0"
   }
 }
